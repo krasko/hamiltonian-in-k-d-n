@@ -129,12 +129,13 @@ def compute_alpha_1(n, d, k):
 def compute_alpha_2(n, d, k):
     result = 0
     half_d = assert_divides(d, 2)
+    half_d_n_minus_2 = assert_divides(d * (n - 2), 2)
     for j in range(half_d):
         for s in range(max(0, k + j - half_d + 1), min(k, half_d - 1 - j) + 1):
             mul1 = math.comb(half_d - 1, j)
             mul2 = math.comb(k, s)
             mul3 = math.comb(assert_divides(d * (n - 2), 2) - k, half_d - 1 - j - s)
-            mul4 = math.comb(assert_divides(d * (n - 1), 2) - 1 - (k + j - s), half_d - 1 - (k + j - s))
+            mul4 = math.comb(assert_divides(d * (n - 1), 2) - 1 - (k + j - s), half_d_n_minus_2)
             result += mul1 * mul2 * mul3 * mul4
     return result
 
@@ -217,4 +218,4 @@ for d in range(2, MAXD + 1):
         row = [compute_a(1, d, d * n, 0), compute_f(d, n, 1), compute_b_tilde(d, n), compute_b_bar(d, n)]
         if any(x > MAXX for x in row):
             break
-        print(f'{n:2}' + ' '.join(f'{row[i]:30}' for i in range(4)))
+        print(f'{n:2}' + ' '.join(f'{val:30}' for val in row))
