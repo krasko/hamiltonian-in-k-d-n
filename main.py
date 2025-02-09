@@ -130,11 +130,7 @@ def compute_alpha_2(n, d, k):
     result = 0
     half_d = assert_divides(d, 2)
     for j in range(half_d):
-        for s in range(min(k, half_d - 1 - j) + 1):
-            if assert_divides(d * (n - 2), 2) - k < 0:
-                continue
-            if half_d - 1 - (k + j - s) < 0:
-                continue
+        for s in range(max(0, k + j - half_d + 1), min(k, half_d - 1 - j) + 1):
             mul1 = math.comb(half_d - 1, j)
             mul2 = math.comb(k, s)
             mul3 = math.comb(assert_divides(d * (n - 2), 2) - k, half_d - 1 - j - s)
@@ -154,7 +150,7 @@ def compute_h_0(n, d):
         result = compute_a(2, d, assert_divides(d * n, 2), 0)
         for k in range(assert_divides(d, 2)):
             result -= 2 * compute_alpha_1(n, d, k) * compute_a(2, d, assert_divides(d * (n - 1), 2), k)
-        for k in range(d - 1):
+        for k in range(min(d - 2, assert_divides(d * (n - 2), 2)) + 1):
             result += compute_alpha_2(n, d, k) * compute_a(2, d, assert_divides(d * (n - 2), 2), k)
         for k in range(assert_divides(d, 2) - 1):
             result -= compute_alpha_3(n, d, k) * compute_a(2, d, assert_divides(d * (n - 1), 2), k)
@@ -193,7 +189,7 @@ def compute_h_2(n, d):
                     mul1 = math.comb(half_d_minus_1, j)
                     mul2 = math.comb(k, s)
                     mul3 = math.comb(half_d_n_minus_2 - k, half_d_minus_1 - j - s)
-                    mul4 = math.comb(assert_divides(d * (n - 1) - 1, 2) - (k + j - s), half_d_minus_1 - (k + j - s))
+                    mul4 = math.comb(assert_divides(d * (n - 1) - 1, 2) - (k + j - s), half_d_n_minus_2)
                     mul5 = compute_a(2, d, half_d_n_minus_2, k)
                     result += mul1 * mul2 * mul3 * mul4 * mul5
     return result
